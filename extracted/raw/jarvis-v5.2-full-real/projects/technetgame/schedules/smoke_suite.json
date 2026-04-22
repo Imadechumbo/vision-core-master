@@ -1,0 +1,4 @@
+{
+  "kind": "smoke_suite",
+  "interval_sec": 900
+}

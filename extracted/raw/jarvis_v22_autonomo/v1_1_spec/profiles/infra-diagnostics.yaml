@@ -1,0 +1,21 @@
+profile_name: infra-diagnostics
+internet_access: true
+host_access: false
+production_access: read_only
+filesystem:
+  readonly_root: true
+  writable_mounts:
+    - /evidence
+secrets:
+  allowed: minimal
+resources:
+  cpu: "1"
+  memory: "1g"
+  timeout_seconds: 600
+network:
+  target_allowlist:
+    - api.technetgame.com.br
+    - technetgame.com.br
+logging:
+  level: info
+  audit: true

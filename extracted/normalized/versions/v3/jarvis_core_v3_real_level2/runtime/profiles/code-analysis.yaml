@@ -1,0 +1,4 @@
+name: code-analysis
+network: disabled_by_default
+mount_workspace: true
+allow_secrets: false

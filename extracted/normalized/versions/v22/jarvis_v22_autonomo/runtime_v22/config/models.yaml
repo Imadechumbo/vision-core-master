@@ -1,0 +1,15 @@
+version: 1
+providers:
+  ollama:
+    base_url: http://127.0.0.1:11434
+    timeout_seconds: 120
+models:
+  small-router:
+    provider: ollama
+    name: llama3:latest
+  instruct-main:
+    provider: ollama
+    name: gemma3:4b
+  coder-main:
+    provider: ollama
+    name: qwen2.5-coder:7b

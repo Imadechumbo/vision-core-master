@@ -1,0 +1,4 @@
+{
+  "kind": "post_deploy_watch",
+  "interval_sec": 600
+}

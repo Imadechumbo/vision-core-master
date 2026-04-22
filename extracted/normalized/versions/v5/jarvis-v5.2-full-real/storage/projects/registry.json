@@ -1,0 +1,14 @@
+{
+  "mocktg": {
+    "name": "mocktg",
+    "root": "/tmp/jv52full/examples/technetgame_backend_mock",
+    "stack": "node_express",
+    "context_dir": "/tmp/jv52full/storage/projects/mocktg"
+  },
+  "technetgame": {
+    "name": "technetgame",
+    "root": "CAMINHO",
+    "stack": "node_express",
+    "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+  }
+}

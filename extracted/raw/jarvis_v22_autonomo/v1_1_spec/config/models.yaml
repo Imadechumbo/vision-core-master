@@ -1,0 +1,47 @@
+version: 1
+models:
+  small-router:
+    provider: ollama
+    model: phi3:mini
+    quantization: q4
+    role:
+      - routing
+      - classification
+      - scoring
+
+  instruct-main:
+    provider: ollama
+    model: qwen2.5:7b-instruct-q4_K_M
+    quantization: q4
+    role:
+      - planning
+      - explanation
+      - diagnostics
+
+  coder-main:
+    provider: ollama
+    model: qwen2.5-coder:7b-instruct-q4_K_M
+    quantization: q4
+    role:
+      - patching
+      - code_review
+      - diff_analysis
+
+  vision-main:
+    provider: external_or_local
+    model: minicpm-v
+    quantization: q4
+    role:
+      - image_analysis
+      - screenshot_debug
+
+fallbacks:
+  free_api:
+    provider: openrouter
+    models:
+      - qwen/qwen2.5-vl-72b-instruct:free
+      - deepseek/deepseek-chat-v3-0324:free
+
+  paid_api:
+    provider: configurable
+    enabled: false

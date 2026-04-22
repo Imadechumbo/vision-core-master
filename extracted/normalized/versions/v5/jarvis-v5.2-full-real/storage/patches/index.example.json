@@ -1,0 +1,10 @@
+[
+  {
+    "patch_id": "patch_20260421134113968668",
+    "project": "technetgame",
+    "target_file": "CAMINHO\\\\Dockerfile",
+    "backup_file": "CAMINHO\\\\Dockerfile.jarvis.bak",
+    "strategy_key": "infra_dockerfile_patch",
+    "created_at": "2026-04-21T13:41:13.968685+00:00"
+  }
+]

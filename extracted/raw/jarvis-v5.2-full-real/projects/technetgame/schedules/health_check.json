@@ -1,0 +1,4 @@
+{
+  "kind": "health_check",
+  "interval_sec": 300
+}

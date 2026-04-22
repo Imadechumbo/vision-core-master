@@ -1,0 +1,33 @@
+version: 1
+routing_policy:
+  default_order:
+    - local
+    - tool
+    - free_api
+    - paid_api
+
+missions:
+  classify:
+    local_model: small-router
+    min_confidence: 0.75
+    fallback: tool
+
+  fix_code:
+    local_model: coder-main
+    min_confidence: 0.72
+    fallback: free_api
+
+  explain:
+    local_model: instruct-main
+    min_confidence: 0.70
+    fallback: free_api
+
+  analyze_image:
+    local_model: vision-main
+    min_confidence: 0.68
+    fallback: free_api
+
+  osint_investigation:
+    preferred: tool
+    tool_profile: osint-investigation
+    fallback: local

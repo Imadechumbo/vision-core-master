@@ -1,0 +1,18 @@
+profile_name: code-analysis
+internet_access: false
+host_access: false
+production_access: false
+filesystem:
+  readonly_root: true
+  writable_mounts:
+    - /workspace
+    - /scratch
+secrets:
+  allowed: false
+resources:
+  cpu: "2"
+  memory: "3g"
+  timeout_seconds: 900
+logging:
+  level: info
+  audit: true

@@ -1,0 +1,17 @@
+# Exemplo dry-run
+python apps/cli/jarvis.py "corrigir vision do technetgame" --project-root "/caminho/projeto" --base-url "https://api.technetgame.com.br" --dry-run
+
+# Exemplo apply
+python apps/cli/jarvis.py "corrigir vision do technetgame" --project-root "/caminho/projeto" --base-url "https://api.technetgame.com.br" --apply
+
+# Query de incidentes
+python apps/cli/jarvis.py incidents --filter vision
+
+# Stable list
+python apps/cli/jarvis.py stable list --project technetgame
+
+# Rollback
+python apps/cli/jarvis.py stable rollback --project technetgame --target "/caminho/projeto"
+
+# Runtime Go
+go run runtime-go/main.go --host 127.0.0.1 --port 8090

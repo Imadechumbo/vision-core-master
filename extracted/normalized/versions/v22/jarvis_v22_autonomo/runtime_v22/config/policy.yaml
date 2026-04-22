@@ -1,0 +1,7 @@
+policy:
+  offline_first: true
+  allow_free_api_fallback: true
+  allow_paid_api_fallback: false
+  require_project_registration: true
+  require_docs_update_for_architecture_changes: true
+  max_risk: 70

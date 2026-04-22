@@ -1,0 +1,470 @@
+{
+  "ok": true,
+  "plan_id": "plan_20260422T152138Z",
+  "created_at": "2026-04-22T15:21:38+00:00",
+  "project_root": "C:\\Users\\imadechumbo\\Desktop\\technetgamev2_git\\backend",
+  "profile": "node-service",
+  "failure_type": "corrigir erro vision mimetype null",
+  "adapter": "node",
+  "analysis": {
+    "root_exists": true,
+    "root": "C:\\Users\\imadechumbo\\Desktop\\technetgamev2_git\\backend",
+    "is_node_project": true,
+    "frameworks": [
+      "Express"
+    ],
+    "entry_candidates": [
+      "app.js",
+      "server.js",
+      "src/app.js",
+      "src/server.js"
+    ],
+    "has_package_json": true,
+    "detected_ports": [],
+    "sample_files": [
+      "app.js",
+      "server.js",
+      "src/app.js",
+      "src/config/mediaCatalog.js",
+      "src/config/seedNews.js",
+      "src/config/sources.js",
+      "src/config/visionAgents.js",
+      "src/jobs/hermesCron.js",
+      "src/jobs/manualRefresh.js",
+      "src/jobs/refreshScheduler.js",
+      "src/middleware/errorHandler.js",
+      "src/routes/aiRoutes.js",
+      "src/routes/editorialRoutes.js",
+      "src/routes/hardwareRoutes.js",
+      "src/routes/healthRoutes.js",
+      "src/routes/hermesRoutes.js",
+      "src/routes/hermesV2Routes.js",
+      "src/routes/mediaRoutes.js",
+      "src/routes/metaRoutes.js",
+      "src/routes/newsRoutes.js",
+      "src/routes/projectIngestRoutes.js",
+      "src/server.js",
+      "src/services/aiMemoryStore.js",
+      "src/services/aiService.js",
+      "src/services/cacheService.js",
+      "src/services/editorialService.js",
+      "src/services/feedService.js",
+      "src/services/gameNewsService.js",
+      "src/services/hardwareService.js",
+      "src/services/hermesCouncilService.js",
+      "src/services/hermesLearningService.js",
+      "src/services/hermesService.js",
+      "src/services/hermesV2Service.js",
+      "src/services/imageService.js",
+      "src/services/languageService.js",
+      "src/services/mediaService.js",
+      "src/services/normalizer.js",
+      "src/services/openclawEditorialService.js",
+      "src/services/qwenService.js",
+      "src/services/technetAiBridge.js",
+      "src/services/translationService.js",
+      "src/utils/date.js",
+      "src/utils/slug.js"
+    ],
+    "routes": [
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/health"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/news"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/meta"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/media"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/hardware"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/v1"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/v1/chat"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/editorial"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/hermes"
+      },
+      {
+        "file": "src/app.js",
+        "method": "use",
+        "route": "/api/hermes-v2"
+      },
+      {
+        "file": "src/app.js",
+        "method": "get",
+        "route": "/admin-ui"
+      },
+      {
+        "file": "src/app.js",
+        "method": "get",
+        "route": "/site"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/health"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/models"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/vision/agents"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/auth/demo"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/auth/demo"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/demo"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/demo"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/auth/me"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/memory"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "delete",
+        "route": "/memory"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/uploads/attachments"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/chat/sessions"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/chat/:id"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "delete",
+        "route": "/chat/:id"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/chat"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/chat/vision"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/vision"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/stream"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "post",
+        "route": "/chat/stream"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/system/openclaw-status"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/system/openclaw-profile"
+      },
+      {
+        "file": "src/routes/aiRoutes.js",
+        "method": "get",
+        "route": "/system/openclaw-settings"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/home"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/week"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/month"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/breaking"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/agents"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "get",
+        "route": "/logs"
+      },
+      {
+        "file": "src/routes/editorialRoutes.js",
+        "method": "post",
+        "route": "/refresh"
+      },
+      {
+        "file": "src/routes/hardwareRoutes.js",
+        "method": "get",
+        "route": "/products"
+      },
+      {
+        "file": "src/routes/healthRoutes.js",
+        "method": "use",
+        "route": "/api/health"
+      },
+      {
+        "file": "src/routes/healthRoutes.js",
+        "method": "get",
+        "route": "/"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "get",
+        "route": "/status"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "get",
+        "route": "/live-council"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "get",
+        "route": "/agents"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "post",
+        "route": "/relearn"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "post",
+        "route": "/qwen-test"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "get",
+        "route": "/:period"
+      },
+      {
+        "file": "src/routes/hermesRoutes.js",
+        "method": "post",
+        "route": "/:period/generate"
+      },
+      {
+        "file": "src/routes/hermesV2Routes.js",
+        "method": "get",
+        "route": "/status"
+      },
+      {
+        "file": "src/routes/hermesV2Routes.js",
+        "method": "post",
+        "route": "/run"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "get",
+        "route": "/game-image"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "get",
+        "route": "/hardware-image"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "get",
+        "route": "/creator-avatar"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "get",
+        "route": "/debug"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "get",
+        "route": "/debug/providers"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "post",
+        "route": "/cache/clear"
+      },
+      {
+        "file": "src/routes/mediaRoutes.js",
+        "method": "post",
+        "route": "/debug/clear-cache"
+      },
+      {
+        "file": "src/routes/metaRoutes.js",
+        "method": "get",
+        "route": "/meta/categories"
+      },
+      {
+        "file": "src/routes/metaRoutes.js",
+        "method": "get",
+        "route": "/meta/sources"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/latest"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/featured"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/home"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/month"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/status"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/game-search"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/category/:slug"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "get",
+        "route": "/source/:slug"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "post",
+        "route": "/refresh"
+      },
+      {
+        "file": "src/routes/newsRoutes.js",
+        "method": "post",
+        "route": "/internal/refresh-news"
+      },
+      {
+        "file": "src/routes/projectIngestRoutes.js",
+        "method": "post",
+        "route": "/project-zip"
+      },
+      {
+        "file": "src/routes/projectIngestRoutes.js",
+        "method": "post",
+        "route": "/attachments"
+      }
+    ],
+    "vision_candidates": [
+      "src/config/visionAgents.js",
+      "src/routes/aiRoutes.js",
+      "src/routes/projectIngestRoutes.js",
+      "src/services/aiMemoryStore.js",
+      "src/services/aiService.js",
+      "src/services/technetAiBridge.js"
+    ],
+    "req_file_usages": [
+      "src/routes/aiRoutes.js",
+      "src/routes/projectIngestRoutes.js"
+    ],
+    "mimetype_usages": [
+      "src/routes/aiRoutes.js",
+      "src/routes/projectIngestRoutes.js"
+    ]
+  },
+  "operations": [
+    {
+      "type": "insert_guard_before_pattern",
+      "file": "src/routes/aiRoutes.js",
+      "pattern": "req.file.mimetype",
+      "guard": "if (!req.file) {\n  return res.status(400).json({ ok: false, error: 'file_required' });\n}\n\n",
+      "reason": "Prevent null access before req.file.mimetype"
+    }
+  ],
+  "risk": "medium",
+  "requires_pass_gold": true,
+  "rollback_mode": "snapshot_multi_file"
+}

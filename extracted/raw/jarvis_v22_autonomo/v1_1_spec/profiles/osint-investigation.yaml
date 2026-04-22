@@ -1,0 +1,22 @@
+profile_name: osint-investigation
+internet_access: true
+host_access: false
+production_access: false
+filesystem:
+  readonly_root: true
+  writable_mounts:
+    - /workspace
+    - /evidence
+secrets:
+  allowed: false
+resources:
+  cpu: "2"
+  memory: "4g"
+  timeout_seconds: 1800
+network:
+  egress_allowlist:
+    - public_dns
+    - https
+logging:
+  level: info
+  audit: true

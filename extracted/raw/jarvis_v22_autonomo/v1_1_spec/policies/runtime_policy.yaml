@@ -1,0 +1,23 @@
+version: 1
+images:
+  allowlist:
+    - redis:7-alpine
+    - postgres:16-alpine
+    - qdrant/qdrant:v1.13.2
+    - ollama/ollama:latest
+    - portainer/portainer-ce:2.27.0
+
+containers:
+  privileged: false
+  run_as_root: false
+  read_only_rootfs: true
+  no_new_privileges: true
+  drop_capabilities: true
+
+network:
+  default_deny_internal_write: true
+  block_production_by_default: true
+
+artifacts:
+  retain_evidence_days: 30
+  retain_runtime_logs_days: 15

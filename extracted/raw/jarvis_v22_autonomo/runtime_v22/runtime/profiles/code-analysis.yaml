@@ -1,0 +1,5 @@
+name: code-analysis
+internet: false
+host_access: false
+write_scope: scratch_only
+secrets: none

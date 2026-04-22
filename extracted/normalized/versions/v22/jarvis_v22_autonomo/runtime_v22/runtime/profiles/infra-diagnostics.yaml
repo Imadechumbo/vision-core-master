@@ -1,0 +1,5 @@
+name: infra-diagnostics
+internet: selective
+host_access: false
+write_scope: none
+secrets: minimal-temporary

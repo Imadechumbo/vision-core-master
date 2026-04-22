@@ -1,0 +1,5 @@
+[project]
+name = "jarvis-core-v3"
+version = "0.3.0"
+description = "JARVIS CORE V3 Executável - Real Nível 2"
+requires-python = ">=3.10"

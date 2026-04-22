@@ -1,0 +1,29 @@
+project: technetgame
+stack: node_express
+critical_endpoints:
+  - name: health
+    method: GET
+    path: /api/health
+  - name: news_latest
+    method: GET
+    path: /api/news/latest
+  - name: chat
+    method: POST
+    path: /api/v1/chat
+    json:
+      message: ping
+  - name: vision
+    method: POST
+    path: /api/v1/chat/vision
+    json:
+      message: ping
+frontend_checks:
+  - /
+  - /relatorios/
+  - /technet-ai/
+infra_checks:
+  - runtime_config
+  - redirects
+  - procfile
+gold_rule:
+  require_all_critical_green: true

@@ -1,0 +1,21 @@
+routes:
+  fix_vision:
+    model: coder-main
+    mode: local
+    fallback: free_api
+  vision_and_zip_working:
+    model: coder-main
+    mode: local
+    fallback: free_api
+  explain:
+    model: instruct-main
+    mode: local
+    fallback: free_api
+  diagnose_runtime:
+    model: instruct-main
+    mode: local
+    fallback: free_api
+  default:
+    model: small-router
+    mode: local
+    fallback: free_api

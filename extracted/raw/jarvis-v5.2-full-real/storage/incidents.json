@@ -1,0 +1,1437 @@
+[
+  {
+    "id": "incident_20260421125614154535",
+    "project": "mocktg",
+    "mission": {
+      "id": "mission_20260421125614",
+      "text": "corrigir vision do technetgame",
+      "intent": "fix_vision",
+      "project": {
+        "name": "mocktg",
+        "root": "/tmp/jv52full/examples/technetgame_backend_mock",
+        "stack": "node_express",
+        "context_dir": "/tmp/jv52full/storage/projects/mocktg"
+      },
+      "base_url": null,
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": true,
+        "has_routes": true,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "src/routes/aiRoutes.js"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "patch AST JavaScript habilitado para vision/upload"
+      ]
+    },
+    "rca": {
+      "root_cause": "vision_contract_or_upload_validation",
+      "cause_chain": [
+        "endpoint multimodal falhou",
+        "ausência de validação robusta para arquivo/imagem",
+        "contrato vision inconsistente"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": []
+    },
+    "patch": {
+      "strategy_key": "node_ast_express_vision_guard",
+      "target_file": "/tmp/jv52full/examples/technetgame_backend_mock/src/routes/aiRoutes.js",
+      "before": "const express = require('express');\nconst router = express.Router();\n\nrouter.post('/api/v1/chat/vision', async (req, res) => {\n  const mime = req.file.mimetype;\n  return res.json({ ok: true, mime });\n});\n\nmodule.exports = router;",
+      "after": "const express = require('express');\nconst router = express.Router();\n\nrouter.post('/api/v1/chat/vision', async (req, res) => {\n  const __jarvisGuard = jarvisV51ValidateVisionInput(req, res);\n  if (__jarvisGuard) return __jarvisGuard;\n\n  const mime = req.file.mimetype;\n  return res.json({ ok: true, mime });\n});\n\nmodule.exports = router;\n// JARVIS_V51_VISION_GUARD\nfunction jarvisV51ValidateVisionInput(req, res) {\n  const hasBody = !!req.body;\n  const hasFile = !!(req.file || (req.files && req.files.length));\n  if (!hasBody && !hasFile) {\n    return res.status(400).json({ ok: false, error: 'missing_vision_input' });\n  }\n  return null;\n}\n",
+      "operations": [
+        {
+          "type": "ast_insert_guard",
+          "file": "/tmp/jv52full/examples/technetgame_backend_mock/src/routes/aiRoutes.js"
+        }
+      ],
+      "summary": "Guard inserido em rota Express vision.",
+      "metadata": {
+        "ast": false,
+        "fallback": true
+      },
+      "diff": "--- before\n+++ after\n@@ -2,8 +2,20 @@\n const router = express.Router();\n \n router.post('/api/v1/chat/vision', async (req, res) => {\n+  const __jarvisGuard = jarvisV51ValidateVisionInput(req, res);\n+  if (__jarvisGuard) return __jarvisGuard;\n+\n   const mime = req.file.mimetype;\n   return res.json({ ok: true, mime });\n });\n \n module.exports = router;\n+// JARVIS_V51_VISION_GUARD\n+function jarvisV51ValidateVisionInput(req, res) {\n+  const hasBody = !!req.body;\n+  const hasFile = !!(req.file || (req.files && req.files.length));\n+  if (!hasBody && !hasFile) {\n+    return res.status(400).json({ ok: false, error: 'missing_vision_input' });\n+  }\n+  return null;\n+}",
+      "risk_level": "medium",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": false
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": false
+    },
+    "pass_gold": false,
+    "created_at": "2026-04-21T12:56:14.154568+00:00"
+  },
+  {
+    "id": "incident_20260421125621368939",
+    "project": "mocktg",
+    "mission": {
+      "id": "mission_20260421125616",
+      "text": "corrigir runtime-config do technetgame",
+      "intent": "fix_runtime_config",
+      "project": {
+        "name": "mocktg",
+        "root": "/tmp/jv52full/examples/technetgame_backend_mock",
+        "stack": "node_express",
+        "context_dir": "/tmp/jv52full/storage/projects/mocktg"
+      },
+      "base_url": "https://api.technetgame.com.br",
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": true,
+        "has_routes": true,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "src/routes/aiRoutes.js"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "infra autopatch habilitado"
+      ]
+    },
+    "rca": {
+      "root_cause": "frontend_api_base_misalignment",
+      "cause_chain": [
+        "runtime-config.js desalinhado",
+        "frontend aponta para API errada"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "mocktg",
+          "strategy_key": "node_ast_express_vision_guard",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T12:56:14.158363+00:00",
+          "metadata": {
+            "intent": "fix_vision",
+            "risk": "medium"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "runtime_config_missing",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Arquivo alvo não encontrado.",
+      "metadata": {
+        "infra": true,
+        "ast": false,
+        "missing": true
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [
+        {
+          "name": "health",
+          "url": "https://api.technetgame.com.br/api/health",
+          "ok": false,
+          "status": 0,
+          "body": "HTTPSConnectionPool(host='api.technetgame.com.br', port=443): Max retries exceeded with url: /api/health (Caused by NameResolutionError(\"HTTPSConnection(host='api.technetgame.com.br', port=443): Failed to resolve 'api.technetgame.com.br' ([Errno -3] Temporary failure in name resolution)\"))"
+        },
+        {
+          "name": "chat",
+          "url": "https://api.technetgame.com.br/api/v1/chat",
+          "ok": false,
+          "status": 0,
+          "body": "HTTPSConnectionPool(host='api.technetgame.com.br', port=443): Max retries exceeded with url: /api/v1/chat (Caused by NameResolutionError(\"HTTPSConnection(host='api.technetgame.com.br', port=443): Failed to resolve 'api.technetgame.com.br' ([Errno -3] Temporary failure in name resolution)\"))"
+        },
+        {
+          "name": "vision",
+          "url": "https://api.technetgame.com.br/api/v1/chat/vision",
+          "ok": false,
+          "status": 0,
+          "body": "HTTPSConnectionPool(host='api.technetgame.com.br', port=443): Max retries exceeded with url: /api/v1/chat/vision (Caused by NameResolutionError(\"HTTPSConnection(host='api.technetgame.com.br', port=443): Failed to resolve 'api.technetgame.com.br' ([Errno -3] Temporary failure in name resolution)\"))"
+        }
+      ],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": false
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": false
+    },
+    "pass_gold": false,
+    "created_at": "2026-04-21T12:56:21.368970+00:00"
+  },
+  {
+    "id": "incident_20260421134110934993",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_20260421134110",
+      "text": "corrigir vision do technetgame",
+      "intent": "fix_vision",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": false
+      },
+      "critical_files": [],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "patch AST JavaScript habilitado para vision/upload"
+      ]
+    },
+    "rca": {
+      "root_cause": "vision_contract_or_upload_validation",
+      "cause_chain": [
+        "endpoint multimodal falhou",
+        "ausência de validação robusta para arquivo/imagem",
+        "contrato vision inconsistente"
+      ],
+      "anomalies": [
+        "nenhum arquivo crítico foi identificado pelo adapter",
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": []
+    },
+    "patch": {
+      "strategy_key": "node_express_noop",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Nenhum patch automático definido para esta missão.",
+      "metadata": {
+        "ast": false
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": false
+        },
+        {
+          "check": "procfile",
+          "ok": false
+        }
+      ],
+      "pass_gold": false
+    },
+    "pass_gold": false,
+    "created_at": "2026-04-21T13:41:10.935012+00:00"
+  },
+  {
+    "id": "incident_20260421134113347377",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_20260421134111",
+      "text": "corrigir runtime-config do technetgame",
+      "intent": "fix_runtime_config",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": "https://api.technetgame.com.br",
+      "dry_run": false,
+      "auto_apply": true,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": false
+      },
+      "critical_files": [],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "infra autopatch habilitado"
+      ]
+    },
+    "rca": {
+      "root_cause": "frontend_api_base_misalignment",
+      "cause_chain": [
+        "runtime-config.js desalinhado",
+        "frontend aponta para API errada"
+      ],
+      "anomalies": [
+        "nenhum arquivo crítico foi identificado pelo adapter",
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:10.939315+00:00",
+          "metadata": {
+            "intent": "fix_vision",
+            "risk": "high"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "runtime_config_missing",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Arquivo alvo não encontrado.",
+      "metadata": {
+        "infra": true,
+        "ast": false,
+        "missing": true
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "require_approval",
+      "reason": "risco high"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "require_approval",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [
+        {
+          "name": "health",
+          "url": "https://api.technetgame.com.br/api/health",
+          "ok": true,
+          "status": 200,
+          "body": "{\"ok\":true,\"status\":\"ok\",\"service\":\"technetgame-api\",\"environment\":\"production\",\"time\":\"2026-04-21T13:41:12.860Z\",\"generatedAt\":\"2026-04-21T13:30:12.675Z\",\"cacheAgeSec\":660,\"totalItems\":40,\"categories\":{\"technology\":11,\"games\":21,\"hardware\":6,\"ai\":24,\"security\":2,\"valve\":4,\"sony\":6,\"microsoft\":11,\"n"
+        },
+        {
+          "name": "chat",
+          "url": "https://api.technetgame.com.br/api/v1/chat",
+          "ok": true,
+          "status": 200,
+          "body": "{\"ok\":true,\"session\":{\"id\":\"session_74973227b5044671\",\"token\":\"demo_a4e5e364b0b54f59b4570d5c422eeb4e\",\"title\":\"ping\",\"createdAt\":\"2026-04-21T13:41:13.452Z\",\"updatedAt\":\"2026-04-21T13:41:14.101Z\",\"messages\":[{\"id\":\"msg_4f2ae3b5fb9a4244\",\"role\":\"user\",\"content\":\"ping\",\"createdAt\":\"2026-04-21T13:41:13."
+        },
+        {
+          "name": "vision",
+          "url": "https://api.technetgame.com.br/api/v1/chat/vision",
+          "ok": true,
+          "status": 400,
+          "body": "{\"ok\":false,\"error\":\"IMAGE_REQUIRED\",\"message\":\"Envie uma imagem no campo \\\"image\\\" (multipart/form-data).\"}"
+        }
+      ],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": false
+        },
+        {
+          "check": "procfile",
+          "ok": false
+        }
+      ],
+      "pass_gold": false
+    },
+    "pass_gold": false,
+    "created_at": "2026-04-21T13:41:13.347391+00:00"
+  },
+  {
+    "id": "incident_20260421134113553138",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_20260421134113",
+      "text": "corrigir redirects do technetgame",
+      "intent": "fix_redirects",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": false,
+      "auto_apply": true,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": false
+      },
+      "critical_files": [],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "infra autopatch habilitado"
+      ]
+    },
+    "rca": {
+      "root_cause": "redirect_rules_inconsistent",
+      "cause_chain": [
+        "_redirects ausente ou incompleto",
+        "rotas HTML/SPA quebrando navegação"
+      ],
+      "anomalies": [
+        "nenhum arquivo crítico foi identificado pelo adapter",
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:10.939315+00:00",
+          "metadata": {
+            "intent": "fix_vision",
+            "risk": "high"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "runtime_config_missing",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:13.351309+00:00",
+          "metadata": {
+            "intent": "fix_runtime_config",
+            "risk": "high"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "infra_redirects_patch",
+      "target_file": "CAMINHO\\_redirects",
+      "before": "",
+      "after": "/ /index.html 200\n/relatorios /relatorios/ 301\n/relatorios.html /relatorios/ 301\n",
+      "operations": [
+        {
+          "type": "replace_file",
+          "file": "CAMINHO\\_redirects"
+        }
+      ],
+      "summary": "_redirects reforçado para páginas críticas",
+      "metadata": {
+        "infra": true,
+        "ast": false
+      },
+      "diff": "--- before\n+++ after\n@@ -0,0 +1,3 @@\n+/ /index.html 200\n+/relatorios /relatorios/ 301\n+/relatorios.html /relatorios/ 301",
+      "risk_level": "low",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "auto_apply",
+      "reason": "estratégia segura: infra_redirects_patch"
+    },
+    "execution": {
+      "applied": true,
+      "mode": "auto_apply",
+      "notes": [
+        "Patch aplicado em _redirects"
+      ],
+      "backup_file": "CAMINHO\\_redirects.jarvis.bak",
+      "target_file": "CAMINHO\\_redirects"
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": false
+        }
+      ],
+      "pass_gold": false
+    },
+    "pass_gold": false,
+    "created_at": "2026-04-21T13:41:13.553151+00:00"
+  },
+  {
+    "id": "incident_20260421134113748404",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_20260421134113",
+      "text": "corrigir Procfile do technetgame",
+      "intent": "fix_procfile",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": false,
+      "auto_apply": true,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "_redirects.jarvis.bak",
+        "_redirects"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "infra autopatch habilitado"
+      ]
+    },
+    "rca": {
+      "root_cause": "procfile_missing_or_invalid",
+      "cause_chain": [
+        "ambiente EB sem Procfile estável"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_redirects_patch",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:13.556623+00:00",
+          "metadata": {
+            "intent": "fix_redirects",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:10.939315+00:00",
+          "metadata": {
+            "intent": "fix_vision",
+            "risk": "high"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "runtime_config_missing",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:13.351309+00:00",
+          "metadata": {
+            "intent": "fix_runtime_config",
+            "risk": "high"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "infra_procfile_patch",
+      "target_file": "CAMINHO\\Procfile",
+      "before": "",
+      "after": "web: npm start\n",
+      "operations": [
+        {
+          "type": "replace_file",
+          "file": "CAMINHO\\Procfile"
+        }
+      ],
+      "summary": "Procfile mínimo gerado para Node",
+      "metadata": {
+        "infra": true,
+        "ast": false
+      },
+      "diff": "--- before\n+++ after\n@@ -0,0 +1 @@\n+web: npm start",
+      "risk_level": "low",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "auto_apply",
+      "reason": "estratégia segura: infra_procfile_patch"
+    },
+    "execution": {
+      "applied": true,
+      "mode": "auto_apply",
+      "notes": [
+        "Patch aplicado em Procfile"
+      ],
+      "backup_file": "CAMINHO\\Procfile.jarvis.bak",
+      "target_file": "CAMINHO\\Procfile"
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": true
+    },
+    "pass_gold": true,
+    "created_at": "2026-04-21T13:41:13.748418+00:00"
+  },
+  {
+    "id": "incident_20260421134113970754",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_20260421134113",
+      "text": "corrigir docker do technetgame",
+      "intent": "fix_docker",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": false,
+      "auto_apply": true,
+      "auto_rollback": false
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "_redirects.jarvis.bak",
+        "_redirects",
+        "Procfile.jarvis.bak",
+        "Procfile"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo",
+        "infra autopatch habilitado"
+      ]
+    },
+    "rca": {
+      "root_cause": "container_entrypoint_or_port_misconfiguration",
+      "cause_chain": [
+        "Dockerfile/compose inconsistente"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_procfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.751782+00:00",
+          "metadata": {
+            "intent": "fix_procfile",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_redirects_patch",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:13.556623+00:00",
+          "metadata": {
+            "intent": "fix_redirects",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:10.939315+00:00",
+          "metadata": {
+            "intent": "fix_vision",
+            "risk": "high"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "infra_dockerfile_patch",
+      "target_file": "CAMINHO\\Dockerfile",
+      "before": "",
+      "after": "FROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nENV HOST=0.0.0.0\nENV PORT=8080\nEXPOSE 8080\nCMD [\"npm\", \"start\"]\n",
+      "operations": [
+        {
+          "type": "replace_file",
+          "file": "CAMINHO\\Dockerfile"
+        }
+      ],
+      "summary": "Dockerfile mínimo gerado para Node",
+      "metadata": {
+        "infra": true,
+        "ast": false
+      },
+      "diff": "--- before\n+++ after\n@@ -0,0 +1,9 @@\n+FROM node:18-alpine\n+WORKDIR /app\n+COPY package*.json ./\n+RUN npm install\n+COPY . .\n+ENV HOST=0.0.0.0\n+ENV PORT=8080\n+EXPOSE 8080\n+CMD [\"npm\", \"start\"]",
+      "risk_level": "low",
+      "historical_score": 0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "auto_apply",
+      "reason": "estratégia segura: infra_dockerfile_patch"
+    },
+    "execution": {
+      "applied": true,
+      "mode": "auto_apply",
+      "notes": [
+        "Patch aplicado em Dockerfile"
+      ],
+      "backup_file": "CAMINHO\\Dockerfile.jarvis.bak",
+      "target_file": "CAMINHO\\Dockerfile"
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": true
+    },
+    "pass_gold": true,
+    "created_at": "2026-04-21T13:41:13.970776+00:00"
+  },
+  {
+    "id": "incident_20260421134115139451",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_sched_technetgame_health_check_1776778874",
+      "text": "scheduled health_check for technetgame",
+      "intent": "general_diagnosis",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false,
+      "scheduled": true
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "_redirects.jarvis.bak",
+        "_redirects",
+        "Procfile.jarvis.bak",
+        "Procfile",
+        "Dockerfile.jarvis.bak",
+        "Dockerfile"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo"
+      ]
+    },
+    "rca": {
+      "root_cause": "stack_or_runtime_misconfiguration",
+      "cause_chain": [
+        "diagnóstico geral por sinais do projeto"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_dockerfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.976331+00:00",
+          "metadata": {
+            "intent": "fix_docker",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_procfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.751782+00:00",
+          "metadata": {
+            "intent": "fix_procfile",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_redirects_patch",
+          "score": -3.0,
+          "successes": 0,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:13.556623+00:00",
+          "metadata": {
+            "intent": "fix_redirects",
+            "risk": "low"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "node_express_noop",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Nenhum patch automático definido para esta missão.",
+      "metadata": {
+        "ast": false
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": -3.0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": true
+    },
+    "pass_gold": true,
+    "created_at": "2026-04-21T13:41:15.139474+00:00"
+  },
+  {
+    "id": "incident_20260421134115150956",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_sched_technetgame_post_deploy_watch_1776778874",
+      "text": "scheduled post_deploy_watch for technetgame",
+      "intent": "general_diagnosis",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false,
+      "scheduled": true
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "_redirects.jarvis.bak",
+        "_redirects",
+        "Procfile.jarvis.bak",
+        "Procfile",
+        "Dockerfile.jarvis.bak",
+        "Dockerfile"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo"
+      ]
+    },
+    "rca": {
+      "root_cause": "stack_or_runtime_misconfiguration",
+      "cause_chain": [
+        "diagnóstico geral por sinais do projeto"
+      ],
+      "anomalies": [],
+      "prior_incident_count": 1,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_dockerfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.976331+00:00",
+          "metadata": {
+            "intent": "fix_docker",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_procfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.751782+00:00",
+          "metadata": {
+            "intent": "fix_procfile",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": 7.0,
+          "successes": 1,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:15.143239+00:00",
+          "metadata": {
+            "intent": "general_diagnosis",
+            "risk": "high"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "node_express_noop",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Nenhum patch automático definido para esta missão.",
+      "metadata": {
+        "ast": false
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": 7.0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": true
+    },
+    "pass_gold": true,
+    "created_at": "2026-04-21T13:41:15.150974+00:00"
+  },
+  {
+    "id": "incident_20260421134115160737",
+    "project": "technetgame",
+    "mission": {
+      "id": "mission_sched_technetgame_smoke_suite_1776778874",
+      "text": "scheduled smoke_suite for technetgame",
+      "intent": "scheduled_smoke",
+      "project": {
+        "name": "technetgame",
+        "root": "CAMINHO",
+        "stack": "node_express",
+        "context_dir": "C:\\Users\\imadechumbo\\Desktop\\gpt-jarvis\\jarvis-v5.2-full-real\\storage\\projects\\technetgame"
+      },
+      "base_url": null,
+      "dry_run": true,
+      "auto_apply": false,
+      "auto_rollback": false,
+      "scheduled": true
+    },
+    "evidence": {
+      "scan_signals": {
+        "node_project": false,
+        "has_routes": false,
+        "has_api": false,
+        "root_exists": true
+      },
+      "critical_files": [
+        "_redirects.jarvis.bak",
+        "_redirects",
+        "Procfile.jarvis.bak",
+        "Procfile",
+        "Dockerfile.jarvis.bak",
+        "Dockerfile"
+      ],
+      "expected_endpoints": [
+        {
+          "name": "health",
+          "method": "GET",
+          "path": "/api/health"
+        },
+        {
+          "name": "chat",
+          "method": "POST",
+          "path": "/api/v1/chat",
+          "json": {
+            "message": "ping"
+          }
+        },
+        {
+          "name": "vision",
+          "method": "POST",
+          "path": "/api/v1/chat/vision",
+          "json": {
+            "message": "ping"
+          }
+        }
+      ],
+      "notes": [
+        "adapter Node/Express ativo"
+      ]
+    },
+    "rca": {
+      "root_cause": "stack_or_runtime_misconfiguration",
+      "cause_chain": [
+        "diagnóstico geral por sinais do projeto"
+      ],
+      "anomalies": [
+        "sem incidentes prévios semelhantes"
+      ],
+      "prior_incident_count": 0,
+      "top_strategies": [
+        {
+          "project": "technetgame",
+          "strategy_key": "node_express_noop",
+          "score": 17.0,
+          "successes": 2,
+          "failures": 1,
+          "updated_at": "2026-04-21T13:41:15.154771+00:00",
+          "metadata": {
+            "intent": "general_diagnosis",
+            "risk": "high"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_dockerfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.976331+00:00",
+          "metadata": {
+            "intent": "fix_docker",
+            "risk": "low"
+          }
+        },
+        {
+          "project": "technetgame",
+          "strategy_key": "infra_procfile_patch",
+          "score": 10.0,
+          "successes": 1,
+          "failures": 0,
+          "updated_at": "2026-04-21T13:41:13.751782+00:00",
+          "metadata": {
+            "intent": "fix_procfile",
+            "risk": "low"
+          }
+        }
+      ]
+    },
+    "patch": {
+      "strategy_key": "node_express_noop",
+      "target_file": null,
+      "before": "",
+      "after": "",
+      "operations": [],
+      "summary": "Nenhum patch automático definido para esta missão.",
+      "metadata": {
+        "ast": false
+      },
+      "diff": "",
+      "risk_level": "high",
+      "historical_score": 17.0,
+      "ast_enabled": false
+    },
+    "policy": {
+      "decision": "dry_run",
+      "reason": "dry-run solicitado"
+    },
+    "execution": {
+      "applied": false,
+      "mode": "dry_run",
+      "notes": [
+        "Patch não aplicado automaticamente."
+      ]
+    },
+    "gates": {
+      "checks": [],
+      "infra_checks": [
+        {
+          "check": "redirects",
+          "ok": true
+        },
+        {
+          "check": "procfile",
+          "ok": true
+        }
+      ],
+      "pass_gold": true
+    },
+    "pass_gold": true,
+    "created_at": "2026-04-21T13:41:15.160752+00:00"
+  }
+]

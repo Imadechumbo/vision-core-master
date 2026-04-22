@@ -1,0 +1,9 @@
+project_id: technetgame
+type: node-express-static
+frontend_path: front
+backend_path: backend
+required_gates:
+  - health_gate
+  - vision_contract_gate
+  - vision_provider_gate
+  - zip_ingest_gate

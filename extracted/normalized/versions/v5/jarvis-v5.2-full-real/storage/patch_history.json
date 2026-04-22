@@ -1,0 +1,26 @@
+[
+  {
+    "patch_id": "patch_20260421134113551276",
+    "project": "technetgame",
+    "target_file": "CAMINHO\\_redirects",
+    "strategy_key": "infra_redirects_patch",
+    "backup_file": "CAMINHO\\_redirects.jarvis.bak",
+    "created_at": "2026-04-21T13:41:13.551290+00:00"
+  },
+  {
+    "patch_id": "patch_20260421134113746425",
+    "project": "technetgame",
+    "target_file": "CAMINHO\\Procfile",
+    "strategy_key": "infra_procfile_patch",
+    "backup_file": "CAMINHO\\Procfile.jarvis.bak",
+    "created_at": "2026-04-21T13:41:13.746439+00:00"
+  },
+  {
+    "patch_id": "patch_20260421134113968668",
+    "project": "technetgame",
+    "target_file": "CAMINHO\\Dockerfile",
+    "strategy_key": "infra_dockerfile_patch",
+    "backup_file": "CAMINHO\\Dockerfile.jarvis.bak",
+    "created_at": "2026-04-21T13:41:13.968685+00:00"
+  }
+]

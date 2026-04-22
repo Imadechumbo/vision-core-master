@@ -1,0 +1,5 @@
+name: osint-investigation
+internet: true
+host_access: false
+write_scope: temporary
+secrets: forbidden

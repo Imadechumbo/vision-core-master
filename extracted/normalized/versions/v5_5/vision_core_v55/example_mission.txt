@@ -1,0 +1,1 @@
+corrigir runtime do projeto python e preparar fluxo de promoção com validação

@@ -1,0 +1,22 @@
+version: 1
+policy:
+  require_pass_gold: true
+  allow_shell: false
+  allow_deploy: false
+  allow_autopatch: true
+  max_risk_auto: 70
+  mandatory_approval:
+    - production_deploy
+    - rollback_production
+    - dns_write
+    - secret_write
+    - firewall_change
+
+risk_scores:
+  read_logs: 10
+  run_health_probe: 15
+  patch_local_code: 45
+  create_route: 55
+  install_dependency: 60
+  change_env_runtime: 72
+  deploy_production: 95
