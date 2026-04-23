@@ -1,0 +1,84 @@
+from flask import Flask, jsonify, request
+from vision_core.runtime.pipeline import VisionPipeline
+
+app = Flask(__name__)
+
+
+@app.get("/api/health")
+def health():
+    return {"ok": True, "service": "vision_core_api"}
+
+
+@app.post("/api/mission")
+def mission():
+    payload = request.get_json(force=True, silent=True) or {}
+    mission_text = payload.get("mission", "default mission")
+    environment = payload.get("environment", "production")
+    integration_context = payload.get("integration_context")
+
+    pipeline = VisionPipeline()
+    result = pipeline.run(
+        mission_text,
+        environment=environment,
+        integration_context=integration_context,
+    )
+
+    return jsonify(_mission_response(result))
+
+
+def _mission_response(result):
+    return {
+        "status": result.status,
+        "mission_id": result.data["mission_id"],
+        "root_cause": result.data["diagnosis"].root_cause,
+        "validation": result.data["validation"].outcome,
+        "pass_gold": result.data["validation"].pass_gold,
+        "promotion_allowed": result.data["security"].promotion_allowed,
+        "applied_files": result.data["execution_receipt"].applied_files,
+        "snapshot_id": result.data["snapshot_id"],
+        "steps": result.steps,
+    }
+
+
+@app.get("/api/memory")
+def memory_list():
+    pipeline = VisionPipeline()
+    return jsonify(pipeline.list_memory())
+
+
+@app.get("/api/memory/<mission_id>")
+def memory_get(mission_id: str):
+    pipeline = VisionPipeline()
+    item = pipeline.get_memory(mission_id)
+    if item is None:
+        return jsonify({"error": "mission_id not found"}), 404
+    return jsonify(item)
+
+
+@app.post("/api/rollback")
+def rollback_snapshot():
+    payload = request.get_json(force=True, silent=True) or {}
+    snapshot_id = payload.get("snapshot_id")
+    if not snapshot_id:
+        return jsonify({"error": "snapshot_id is required"}), 400
+
+    pipeline = VisionPipeline()
+    result = pipeline.restore_manager.restore_snapshot(snapshot_id)
+    return jsonify(result)
+
+
+@app.post("/api/rollback-file")
+def rollback_file():
+    payload = request.get_json(force=True, silent=True) or {}
+    snapshot_id = payload.get("snapshot_id")
+    target_file = payload.get("target_file")
+    if not snapshot_id or not target_file:
+        return jsonify({"error": "snapshot_id and target_file are required"}), 400
+
+    pipeline = VisionPipeline()
+    result = pipeline.rollback_file(snapshot_id, target_file)
+    return jsonify(result)
+
+
+if __name__ == "__main__":
+    app.run(port=8080)
