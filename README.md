@@ -1,14 +1,24 @@
-# VISION CORE MASTER
+# VISION CORE V6.5
 
-Repositório de unificação do Jarvis Core → Vision Core.
+Pacote V6.5 com:
 
-## Estrutura
+- Hermes (diagnosis)
+- SDDF (validation)
+- Aegis (security)
+- Operator (execution)
+- Stable Vault (rollback)
+- Memory store persistente
+- Pipeline operacional integrado
+- CLI e API base
 
-- extracted/raw → dump original
-- extracted/normalized/versions → evolução do sistema
-- extracted/normalized/fragments/core → base arquitetural
-- extracted/normalized/fragments/misc → itens não classificados
+## Comandos
 
-## Objetivo
+```bash
+python -m vision_core.apps.cli.run_pipeline
+python -m vision_core.apps.cli.vision health
+python -m vision_core.apps.cli.vision mission "corrigir runtime do technetgame"
+```
 
-Reconstruir o sistema final Vision Core V6.
+## Regra central
+
+Sem PASS GOLD nada é promovido.

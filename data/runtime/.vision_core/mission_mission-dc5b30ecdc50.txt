@@ -1,0 +1,3 @@
+MISSION=corrigir runtime do technetgame
+ROOT_CAUSE=runtime_instability
+CONFIDENCE=0.82
