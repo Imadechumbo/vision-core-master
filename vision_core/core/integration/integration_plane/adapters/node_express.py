@@ -1,0 +1,2 @@
+class NodeAdapter:
+    pass

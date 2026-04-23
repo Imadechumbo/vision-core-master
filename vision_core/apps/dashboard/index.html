@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VISION CORE</title>
+<style>
+body { background: #02060d; color: #00ffff; font-family: monospace; }
+button { margin: 10px; padding: 10px; }
+</style>
+</head>
+<body>
+<h1>VISION CORE V6</h1>
+
+<button onclick="runMission()">Executar Missão</button>
+
+<pre id="log"></pre>
+
+<script>
+function runMission() {
+    fetch("/api/mission", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ mission: "test" })
+    })
+    .then(r => r.json())
+    .then(d => {
+        document.getElementById("log").innerText =
+            JSON.stringify(d, null, 2);
+    });
+}
+</script>
+
+</body>
+</html>
