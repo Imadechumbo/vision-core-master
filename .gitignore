@@ -81,6 +81,8 @@ bin/
 # RUNTIME GENERATED (VISION CORE)
 # =========================
 memory/
+!vision_core/memory/
+!vision_core/memory/**
 vault/snapshots/
 vault/tmp/
 runtime/cache/
@@ -91,3 +93,14 @@ runtime/state/
 # =========================
 # extracted/raw/**/__pycache__/
 # extracted/raw/**/*.pyc
+# Runtime/state artifacts that must never be versioned
+.vision_core_runtime/
+.vision_core_runtime_*/
+.vision_core_runtime_demo/
+.vision_core_test_runtime_*/
+vault/
+workspace/
+codex_exports/
+integration/history.json
+integration/last_integration.json
+extracted/

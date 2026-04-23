@@ -36,6 +36,7 @@ def _mission_response(result):
         "promotion_allowed": result.data["security"].promotion_allowed,
         "applied_files": result.data["execution_receipt"].applied_files,
         "snapshot_id": result.data["snapshot_id"],
+        "integration": result.data["integration"],
         "steps": result.steps,
     }
 
