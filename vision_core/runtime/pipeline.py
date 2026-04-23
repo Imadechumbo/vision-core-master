@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
@@ -6,13 +7,14 @@ from uuid import uuid4
 from vision_core.diagnosis.service import HermesService
 from vision_core.execution.apply import OperatorEngine
 from vision_core.execution.planner import PatchPlanner
-from vision_core.memory.store import SQLiteMemoryStore
 from vision_core.integration.diff_service import DiffService
 from vision_core.integration.service import IntegrationOrchestrator
+from vision_core.memory.store import SQLiteMemoryStore
 from vision_core.rollback.restore import RestoreManager
 from vision_core.rollback.snapshot import SnapshotManager
 from vision_core.security.service import AegisService
 from vision_core.validation.service import SDDFService
+
 
 class PipelineResult:
     def __init__(self):
@@ -21,7 +23,14 @@ class PipelineResult:
         self.data = {}
 
     def log(self, step, info):
-        self.steps.append({"step": step, "info": info, "time": datetime.now(timezone.utc).isoformat()})
+        self.steps.append(
+            {
+                "step": step,
+                "info": info,
+                "time": datetime.now(timezone.utc).isoformat(),
+            }
+        )
+
 
 class VisionPipeline:
     def __init__(self, project_root: str | None = None):
@@ -44,15 +53,30 @@ class VisionPipeline:
         self.restore_manager = RestoreManager(str(self.vault_root))
         self.memory = SQLiteMemoryStore(str(self.memory_root))
         self.diff_service = DiffService()
-        self.integration = IntegrationOrchestrator(runtime_root=self.project_root, repository_root=self.project_root)
+        self.integration = IntegrationOrchestrator(
+            runtime_root=self.project_root,
+            repository_root=self.project_root,
+        )
 
-    def run(self, mission: str, environment: str = "production"):
+    def run(
+        self,
+        mission: str,
+        environment: str = "production",
+        integration_context: dict | None = None,
+    ):
         mission_id = f"mission-{uuid4().hex[:12]}"
         self.result.data["mission_id"] = mission_id
         self.result.data["mission_text"] = mission
+        self.result.data["integration_context"] = integration_context or {}
 
         self.result.log("mission", mission)
-        data = self.orchestration(mission_id, mission)
+
+        data = self.orchestration(
+            mission_id,
+            mission,
+            integration_context=integration_context,
+        )
+
         diagnosis = self.diagnosis(data)
         data["diagnosis"] = diagnosis
 
@@ -95,7 +119,6 @@ class VisionPipeline:
         memory_record = self.persist_memory(data)
         data["memory_record"] = memory_record
 
-        # feedback loop
         score = 1.0 if decision == "GOLD" else (0.5 if decision == "PASS" else 0.0)
         feedback_record = self.memory.record_feedback(
             mission_id=mission_id,
@@ -106,28 +129,37 @@ class VisionPipeline:
         )
         data["feedback_record"] = feedback_record
 
-        self.result.data.update({
-            "diagnosis": diagnosis,
-            "plan": plan,
-            "snapshot_id": snapshot_id,
-            "execution_receipt": receipt,
-            "validation": validation,
-            "security": security,
-            "decision": decision,
-            "diffs": data["diffs"],
-            "integration": integration_result,
-            "memory_record": memory_record,
-            "feedback_record": feedback_record,
-        })
+        self.result.data.update(
+            {
+                "diagnosis": diagnosis,
+                "plan": plan,
+                "snapshot_id": snapshot_id,
+                "execution_receipt": receipt,
+                "validation": validation,
+                "security": security,
+                "decision": decision,
+                "diffs": data["diffs"],
+                "integration": integration_result,
+                "memory_record": memory_record,
+                "feedback_record": feedback_record,
+            }
+        )
         return self.result
 
-    def orchestration(self, mission_id, mission):
+    def orchestration(self, mission_id, mission, integration_context=None):
         self.result.log("orchestration", "dispatch mission")
-        return {"mission_id": mission_id, "mission": mission}
+        return {
+            "mission_id": mission_id,
+            "mission": mission,
+            "integration_context": integration_context or {},
+        }
 
     def diagnosis(self, data):
         self.result.log("diagnosis", "Hermes analyzing")
-        return self.hermes.analyze(mission_id=data["mission_id"], mission_text=data["mission"])
+        return self.hermes.analyze(
+            mission_id=data["mission_id"],
+            mission_text=data["mission"],
+        )
 
     def planning(self, data):
         self.result.log("planning", "creating adaptive execution plan")
@@ -140,7 +172,10 @@ class VisionPipeline:
 
     def snapshot(self, data):
         self.result.log("snapshot", "creating pre-execution snapshot")
-        return self.snapshot_manager.create_snapshot(mission_id=data["mission_id"], plan=data["plan"])
+        return self.snapshot_manager.create_snapshot(
+            mission_id=data["mission_id"],
+            plan=data["plan"],
+        )
 
     def execution(self, data):
         self.result.log("execution", "Operator applying plan")
@@ -148,11 +183,19 @@ class VisionPipeline:
 
     def validation(self, data):
         self.result.log("validation", "SDDF running gates")
-        return self.sddf.validate(mission_id=data["mission_id"], diagnosis=data["diagnosis"], execution_data=data)
+        return self.sddf.validate(
+            mission_id=data["mission_id"],
+            diagnosis=data["diagnosis"],
+            execution_data=data,
+        )
 
     def security(self, data, environment="production"):
         self.result.log("security", "Aegis policy check")
-        return self.aegis.enforce(mission_id=data["mission_id"], validation=data["validation"], environment=environment)
+        return self.aegis.enforce(
+            mission_id=data["mission_id"],
+            validation=data["validation"],
+            environment=environment,
+        )
 
     def decision(self, data):
         self.result.log("decision", "evaluating")
