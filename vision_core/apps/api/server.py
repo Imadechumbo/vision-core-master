@@ -14,23 +14,30 @@ def mission():
     payload = request.get_json(force=True, silent=True) or {}
     mission_text = payload.get("mission", "default mission")
     environment = payload.get("environment", "production")
+    integration_context = payload.get("integration_context")
 
     pipeline = VisionPipeline()
-    result = pipeline.run(mission_text, environment=environment)
-
-    return jsonify(
-        {
-            "status": result.status,
-            "mission_id": result.data["mission_id"],
-            "root_cause": result.data["diagnosis"].root_cause,
-            "validation": result.data["validation"].outcome,
-            "pass_gold": result.data["validation"].pass_gold,
-            "promotion_allowed": result.data["security"].promotion_allowed,
-            "applied_files": result.data["execution_receipt"].applied_files,
-            "snapshot_id": result.data["snapshot_id"],
-            "steps": result.steps,
-        }
+    result = pipeline.run(
+        mission_text,
+        environment=environment,
+        integration_context=integration_context,
     )
+
+    return jsonify(_mission_response(result))
+
+
+def _mission_response(result):
+    return {
+        "status": result.status,
+        "mission_id": result.data["mission_id"],
+        "root_cause": result.data["diagnosis"].root_cause,
+        "validation": result.data["validation"].outcome,
+        "pass_gold": result.data["validation"].pass_gold,
+        "promotion_allowed": result.data["security"].promotion_allowed,
+        "applied_files": result.data["execution_receipt"].applied_files,
+        "snapshot_id": result.data["snapshot_id"],
+        "steps": result.steps,
+    }
 
 
 @app.get("/api/memory")
