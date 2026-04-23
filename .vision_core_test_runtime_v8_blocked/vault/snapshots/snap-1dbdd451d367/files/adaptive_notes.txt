@@ -1,0 +1,4 @@
+adaptive_context_for=policy_or_configuration_issue
+feedback_count=1
+avg_score=0.50
+preferred_strategy=policy_adjustment_then_validate

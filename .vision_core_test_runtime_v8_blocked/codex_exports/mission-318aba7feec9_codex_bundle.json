@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-04-23T14:04:13.048903+00:00",
+  "mission_id": "mission-318aba7feec9",
+  "mission": "ajustar policy sensível",
+  "decision": "PASS",
+  "root_cause": "policy_or_configuration_issue",
+  "strategy": "policy_adjustment_then_validate",
+  "validation": {
+    "outcome": "PASS",
+    "pass_gold": false,
+    "gates": {
+      "diagnosis_present": true,
+      "execution_completed": true,
+      "snapshot_created": true,
+      "confidence_threshold": false,
+      "multi_file_supported": true
+    },
+    "findings": [
+      "Diagnosis confidence below GOLD threshold"
+    ]
+  },
+  "security": {
+    "promotion_allowed": false,
+    "reasons": [
+      "Sem PASS GOLD nada é promovido"
+    ]
+  },
+  "execution": {
+    "applied_files": 2,
+    "details": [
+      "append_text applied to .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt",
+      "replace_text applied to .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt"
+    ],
+    "diffs": [
+      {
+        "target_file": ".vision_core_test_runtime_v8_blocked/workspace/mission_output.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt.before\n+++ .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt.after\n@@ -0,0 +1,4 @@\n+mission_id=mission-318aba7feec9\n+root_cause=policy_or_configuration_issue\n+summary=Hermes heuristic mode detected probable policy/configuration issue\n+strategy=policy_adjustment_then_validate\n"
+      },
+      {
+        "target_file": ".vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt.before\n+++ .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt.after\n@@ -0,0 +1,4 @@\n+incident=mission-318aba7feec9\n+confidence=0.74\n+root_cause=policy_or_configuration_issue\n+source=heuristic\n"
+      }
+    ]
+  },
+  "snapshot_id": "snap-cdb260e0f63c"
+}

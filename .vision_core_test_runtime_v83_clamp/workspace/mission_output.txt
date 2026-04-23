@@ -1,0 +1,4 @@
+mission_id=mission-a835e9ca2e8c
+root_cause=runtime_instability
+summary=Hermes heuristic mode detected probable runtime instability
+strategy=stabilize_runtime_then_validate

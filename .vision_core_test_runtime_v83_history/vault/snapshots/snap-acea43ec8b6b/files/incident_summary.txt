@@ -1,0 +1,4 @@
+incident=mission-7e3f34ce5594
+confidence=0.82
+root_cause=runtime_instability
+source=heuristic

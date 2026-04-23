@@ -1,11 +1,9 @@
 from vision_core.diagnosis.contracts import DiagnosisResult
 from vision_core.validation.contracts import ValidationResult
 
-
 class SDDFService:
     def validate(self, mission_id: str, diagnosis: DiagnosisResult, execution_data: dict) -> ValidationResult:
         receipt = execution_data.get("execution_receipt")
-
         execution_completed = False
         file_count_ok = False
         if receipt is not None:
@@ -20,7 +18,7 @@ class SDDFService:
             "multi_file_supported": file_count_ok,
         }
 
-        findings: list[str] = []
+        findings = []
         if not gates["diagnosis_present"]:
             findings.append("Diagnosis result missing")
         if not gates["execution_completed"]:
@@ -32,12 +30,7 @@ class SDDFService:
         if not gates["multi_file_supported"]:
             findings.append("No file operations were applied")
 
-        if (
-            not gates["diagnosis_present"]
-            or not gates["execution_completed"]
-            or not gates["snapshot_created"]
-            or not gates["multi_file_supported"]
-        ):
+        if not gates["diagnosis_present"] or not gates["execution_completed"] or not gates["snapshot_created"] or not gates["multi_file_supported"]:
             outcome = "FAIL"
             pass_gold = False
         elif all(gates.values()):

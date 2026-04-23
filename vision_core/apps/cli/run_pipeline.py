@@ -1,11 +1,7 @@
 from vision_core.runtime.pipeline import VisionPipeline
 
 pipeline = VisionPipeline()
-
-result = pipeline.run(
-    "corrigir runtime do technetgame",
-    environment="production",
-)
+result = pipeline.run("corrigir runtime do technetgame", environment="production")
 
 print("STATUS:", result.status)
 print("MISSION_ID:", result.data["mission_id"])

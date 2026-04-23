@@ -1,11 +1,10 @@
 from vision_core.validation.contracts import ValidationResult
 from vision_core.security.contracts import SecurityDecision
 
-
 class AegisService:
     def enforce(self, mission_id: str, validation: ValidationResult, environment: str = "production") -> SecurityDecision:
         requires_gold = environment == "production"
-        reasons: list[str] = []
+        reasons = []
 
         allowed = validation.outcome != "FAIL"
         if not allowed:

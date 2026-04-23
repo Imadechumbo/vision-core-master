@@ -1,0 +1,111 @@
+{
+  "recorded_at": "2026-04-23T14:53:50.554663+00:00",
+  "mission_id": "mission-3272279ffd6a",
+  "status": "ready",
+  "integration": {
+    "mission_id": "mission-3272279ffd6a",
+    "status": "ready",
+    "codex": {
+      "status": "exported",
+      "bundle_path": ".vision_core_test_runtime_v83_history/codex_exports/mission-3272279ffd6a_codex_bundle.json",
+      "files_exported": 3,
+      "reason": "",
+      "metadata": {
+        "engine": "CodexBridge"
+      }
+    },
+    "pr_validation": {
+      "mission_id": "mission-3272279ffd6a",
+      "status": "approved",
+      "merge_allowed": true,
+      "checks": [
+        {
+          "name": "pass_gold_required",
+          "passed": true,
+          "detail": "Sem PASS GOLD não existe merge nem promoção."
+        },
+        {
+          "name": "promotion_allowed",
+          "passed": true,
+          "detail": "Aegis precisa liberar promoção em produção."
+        },
+        {
+          "name": "execution_has_diffs",
+          "passed": true,
+          "detail": "PR precisa conter alterações reais e diff visível."
+        },
+        {
+          "name": "validation_not_fail",
+          "passed": true,
+          "detail": "SDDF não pode retornar FAIL."
+        }
+      ],
+      "summary": "PR validation approved",
+      "metadata": {
+        "engine": "PRValidationService"
+      }
+    },
+    "github": {
+      "status": "skipped",
+      "enabled": false,
+      "branch": null,
+      "commit_sha": null,
+      "pr_number": null,
+      "pr_url": null,
+      "push_performed": false,
+      "auto_merge_attempted": false,
+      "auto_merge_completed": false,
+      "reason": "GitHub integration not configured or repository root is not a git repo",
+      "error_class": "github_not_configured",
+      "attempts": 0,
+      "reused_pull_request": false,
+      "metadata": {
+        "engine": "GitHubBridge",
+        "debug": {
+          "enabled": false,
+          "repository_root": "/mnt/data/v82work/VISION_CORE_MASTER/.vision_core_test_runtime_v83_history",
+          "repo": "",
+          "base_branch": "main",
+          "auto_merge": false,
+          "max_api_attempts": 3
+        }
+      }
+    },
+    "metadata": {
+      "engine": "IntegrationOrchestrator",
+      "state_file": ".vision_core_test_runtime_v83_history/integration/last_integration.json",
+      "history_file": ".vision_core_test_runtime_v83_history/integration/history.json"
+    }
+  },
+  "summary": {
+    "mission": "corrigir runtime 6",
+    "decision": "GOLD",
+    "validation": "GOLD",
+    "pass_gold": true,
+    "promotion_allowed": true,
+    "applied_files": 3,
+    "snapshot_id": "snap-22698bca5efc"
+  },
+  "diffs": [
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/mission_output.txt",
+      "diff_text": "--- .vision_core_test_runtime_v83_history/workspace/mission_output.txt.before\n+++ .vision_core_test_runtime_v83_history/workspace/mission_output.txt.after\n@@ -22,3 +22,7 @@\n root_cause=runtime_instability\n summary=Hermes heuristic mode detected probable runtime instability\n strategy=stabilize_runtime_then_validate\n+mission_id=mission-3272279ffd6a\n+root_cause=runtime_instability\n+summary=Hermes heuristic mode detected probable runtime instability\n+strategy=stabilize_runtime_then_validate\n"
+    },
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/incident_summary.txt",
+      "diff_text": "--- .vision_core_test_runtime_v83_history/workspace/incident_summary.txt.before\n+++ .vision_core_test_runtime_v83_history/workspace/incident_summary.txt.after\n@@ -1,4 +1,4 @@\n-incident=mission-f55e94bfb933\n+incident=mission-3272279ffd6a\n confidence=0.82\n root_cause=runtime_instability\n source=heuristic\n"
+    },
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/adaptive_notes.txt",
+      "diff_text": "--- .vision_core_test_runtime_v83_history/workspace/adaptive_notes.txt.before\n+++ .vision_core_test_runtime_v83_history/workspace/adaptive_notes.txt.after\n@@ -1,4 +1,4 @@\n adaptive_context_for=runtime_instability\n-feedback_count=5\n+feedback_count=6\n avg_score=1.00\n preferred_strategy=stabilize_runtime_then_validate\n"
+    }
+  ],
+  "github_debug": {
+    "enabled": false,
+    "repository_root": "/mnt/data/v82work/VISION_CORE_MASTER/.vision_core_test_runtime_v83_history",
+    "repo": "",
+    "base_branch": "main",
+    "auto_merge": false,
+    "max_api_attempts": 3
+  }
+}

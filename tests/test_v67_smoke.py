@@ -1,6 +1,5 @@
 from vision_core.runtime.pipeline import VisionPipeline
 
-
 def test_v67_memory_queries_and_pipeline():
     pipeline = VisionPipeline(project_root=".vision_core_test_runtime_v67")
     result = pipeline.run("corrigir runtime do technetgame", environment="production")

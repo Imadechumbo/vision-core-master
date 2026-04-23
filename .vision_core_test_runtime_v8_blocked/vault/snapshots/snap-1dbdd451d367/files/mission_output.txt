@@ -1,0 +1,8 @@
+mission_id=mission-318aba7feec9
+root_cause=policy_or_configuration_issue
+summary=Hermes heuristic mode detected probable policy/configuration issue
+strategy=policy_adjustment_then_validate
+mission_id=mission-f790eef9e071
+root_cause=policy_or_configuration_issue
+summary=Hermes heuristic mode detected probable policy/configuration issue
+strategy=policy_adjustment_then_validate

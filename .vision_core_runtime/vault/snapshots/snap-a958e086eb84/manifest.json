@@ -1,0 +1,17 @@
+{
+  "snapshot_id": "snap-a958e086eb84",
+  "mission_id": "mission-892961799552",
+  "files": [
+    {
+      "target_file": ".vision_core_runtime\\workspace\\mission_output.txt",
+      "file_name": "mission_output.txt",
+      "source_existed": true
+    },
+    {
+      "target_file": ".vision_core_runtime\\workspace\\incident_summary.txt",
+      "file_name": "incident_summary.txt",
+      "source_existed": true
+    }
+  ],
+  "created_at": "2026-04-23T13:33:08.972301+00:00"
+}

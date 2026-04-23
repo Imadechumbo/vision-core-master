@@ -1,8 +1,6 @@
 import json
 import sys
-
 from vision_core.runtime.pipeline import VisionPipeline
-
 
 def print_usage():
     print("VISION CORE CLI")
@@ -14,7 +12,6 @@ def print_usage():
     print("  python -m vision_core.apps.cli.vision memory get <mission_id>")
     print("  python -m vision_core.apps.cli.vision rollback <snapshot_id>")
     print("  python -m vision_core.apps.cli.vision rollback-file <snapshot_id> <target_file>")
-
 
 def run_mission(args):
     if not args:
@@ -30,30 +27,38 @@ def run_mission(args):
     print("MISSION:", mission)
     print("MISSION_ID:", result.data["mission_id"])
     print("ROOT_CAUSE:", result.data["diagnosis"].root_cause)
+    print("STRATEGY:", result.data["diagnosis"].strategy)
+    print("SOURCE:", result.data["diagnosis"].source)
     print("VALIDATION:", result.data["validation"].outcome)
     print("PASS_GOLD:", result.data["validation"].pass_gold)
     print("PROMOTION_ALLOWED:", result.data["security"].promotion_allowed)
     print("APPLIED_FILES:", result.data["execution_receipt"].applied_files)
     print("SNAPSHOT_ID:", result.data["snapshot_id"])
+    integration = result.data.get("integration")
+    if integration is not None:
+        print("INTEGRATION_STATUS:", integration.status)
+        print("CODEX_BUNDLE:", integration.codex.bundle_path)
+        print("PR_VALIDATION:", integration.pr_validation.status)
+        print("MERGE_ALLOWED:", integration.pr_validation.merge_allowed)
+        print("GITHUB_STATUS:", integration.github.status)
+        if integration.github.branch:
+            print("GITHUB_BRANCH:", integration.github.branch)
+        if integration.github.pr_url:
+            print("GITHUB_PR_URL:", integration.github.pr_url)
     print("")
 
     for step in result.steps:
         print(f"[{step['time']}] {step['step']}: {step['info']}")
-
     return 0
-
 
 def health():
     print("VISION CORE OK")
     return 0
 
-
 def memory_list():
     pipeline = VisionPipeline()
-    items = pipeline.list_memory()
-    print(json.dumps(items, indent=2, ensure_ascii=False))
+    print(json.dumps(pipeline.list_memory(), indent=2, ensure_ascii=False))
     return 0
-
 
 def memory_get(mission_id: str):
     pipeline = VisionPipeline()
@@ -64,20 +69,15 @@ def memory_get(mission_id: str):
     print(json.dumps(item, indent=2, ensure_ascii=False))
     return 0
 
-
 def rollback_snapshot(snapshot_id: str):
     pipeline = VisionPipeline()
-    result = pipeline.restore_manager.restore_snapshot(snapshot_id)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(pipeline.restore_manager.restore_snapshot(snapshot_id), indent=2, ensure_ascii=False))
     return 0
-
 
 def rollback_file(snapshot_id: str, target_file: str):
     pipeline = VisionPipeline()
-    result = pipeline.rollback_file(snapshot_id, target_file)
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(pipeline.rollback_file(snapshot_id, target_file), indent=2, ensure_ascii=False))
     return 0
-
 
 def main():
     if len(sys.argv) < 2:
@@ -85,15 +85,10 @@ def main():
         raise SystemExit(1)
 
     command = sys.argv[1].lower()
-
     if command == "mission":
-        code = run_mission(sys.argv[2:])
-        raise SystemExit(code)
-
+        raise SystemExit(run_mission(sys.argv[2:]))
     if command == "health":
-        code = health()
-        raise SystemExit(code)
-
+        raise SystemExit(health())
     if command == "memory":
         if len(sys.argv) < 3:
             print_usage()
@@ -105,17 +100,14 @@ def main():
             raise SystemExit(memory_get(sys.argv[3]))
         print_usage()
         raise SystemExit(1)
-
     if command == "rollback" and len(sys.argv) >= 3:
         raise SystemExit(rollback_snapshot(sys.argv[2]))
-
     if command == "rollback-file" and len(sys.argv) >= 4:
         raise SystemExit(rollback_file(sys.argv[2], sys.argv[3]))
 
     print(f"[ERRO] Comando inválido: {command}")
     print_usage()
     raise SystemExit(1)
-
 
 if __name__ == "__main__":
     main()

@@ -1,0 +1,17 @@
+{
+  "snapshot_id": "snap-cb4da417d776",
+  "mission_id": "mission-4333f3663068",
+  "files": [
+    {
+      "target_file": ".vision_core_test_runtime_v81_state/workspace/mission_output.txt",
+      "file_name": "mission_output.txt",
+      "source_existed": false
+    },
+    {
+      "target_file": ".vision_core_test_runtime_v81_state/workspace/incident_summary.txt",
+      "file_name": "incident_summary.txt",
+      "source_existed": false
+    }
+  ],
+  "created_at": "2026-04-23T14:22:48.670933+00:00"
+}

@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-04-23T14:44:49.875873+00:00",
+  "mission_id": "mission-bfca16240d3e",
+  "mission": "ajustar policy sensível",
+  "decision": "PASS",
+  "root_cause": "policy_or_configuration_issue",
+  "strategy": "policy_adjustment_then_validate",
+  "validation": {
+    "outcome": "PASS",
+    "pass_gold": false,
+    "gates": {
+      "diagnosis_present": true,
+      "execution_completed": true,
+      "snapshot_created": true,
+      "confidence_threshold": false,
+      "multi_file_supported": true
+    },
+    "findings": [
+      "Diagnosis confidence below GOLD threshold"
+    ]
+  },
+  "security": {
+    "promotion_allowed": false,
+    "reasons": [
+      "Sem PASS GOLD nada é promovido"
+    ]
+  },
+  "execution": {
+    "applied_files": 3,
+    "details": [
+      "append_text applied to .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt",
+      "replace_text applied to .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt",
+      "replace_text applied to .vision_core_test_runtime_v8_blocked/workspace/adaptive_notes.txt"
+    ],
+    "diffs": [
+      {
+        "target_file": ".vision_core_test_runtime_v8_blocked/workspace/mission_output.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt.before\n+++ .vision_core_test_runtime_v8_blocked/workspace/mission_output.txt.after\n@@ -6,3 +6,7 @@\n root_cause=policy_or_configuration_issue\n summary=Hermes heuristic mode detected probable policy/configuration issue\n strategy=policy_adjustment_then_validate\n+mission_id=mission-bfca16240d3e\n+root_cause=policy_or_configuration_issue\n+summary=Hermes heuristic mode detected probable policy/configuration issue\n+strategy=policy_adjustment_then_validate\n"
+      },
+      {
+        "target_file": ".vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt.before\n+++ .vision_core_test_runtime_v8_blocked/workspace/incident_summary.txt.after\n@@ -1,4 +1,4 @@\n-incident=mission-f790eef9e071\n+incident=mission-bfca16240d3e\n confidence=0.74\n root_cause=policy_or_configuration_issue\n source=heuristic\n"
+      },
+      {
+        "target_file": ".vision_core_test_runtime_v8_blocked/workspace/adaptive_notes.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8_blocked/workspace/adaptive_notes.txt.before\n+++ .vision_core_test_runtime_v8_blocked/workspace/adaptive_notes.txt.after\n@@ -1,4 +1,4 @@\n adaptive_context_for=policy_or_configuration_issue\n-feedback_count=1\n+feedback_count=2\n avg_score=0.50\n preferred_strategy=policy_adjustment_then_validate\n"
+      }
+    ]
+  },
+  "snapshot_id": "snap-1dbdd451d367"
+}

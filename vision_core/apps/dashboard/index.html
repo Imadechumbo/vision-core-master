@@ -1,33 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>VISION CORE</title>
-<style>
-body { background: #02060d; color: #00ffff; font-family: monospace; }
-button { margin: 10px; padding: 10px; }
-</style>
+  <meta charset="UTF-8" />
+  <title>VISION CORE V8.3 Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #08111a;
+      --panel: #0f1b28;
+      --panel-2: #122235;
+      --text: #e7f4ff;
+      --muted: #8fb6d8;
+      --accent: #4ad4ff;
+      --ok: #41d17d;
+      --warn: #ffcc66;
+      --bad: #ff6b6b;
+      --border: #21405f;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .wrap { display: grid; grid-template-columns: 320px 1fr; min-height: 100vh; }
+    .sidebar { border-right: 1px solid var(--border); background: #0b1520; padding: 20px; }
+    .brand { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 18px; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 16px; }
+    .main { padding: 20px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr; align-content: start; }
+    .wide { grid-column: 1 / -1; }
+    h2, h3 { margin: 0 0 12px 0; }
+    input, textarea, button, select { width: 100%; border-radius: 10px; border: 1px solid var(--border); background: var(--panel-2); color: var(--text); padding: 10px; margin-top: 8px; }
+    button { cursor: pointer; background: #11314d; border-color: #1d5a86; }
+    pre { white-space: pre-wrap; word-break: break-word; background: #09121b; border: 1px solid var(--border); border-radius: 12px; padding: 12px; min-height: 160px; overflow: auto; }
+    .status-ok { color: var(--ok); }
+    .status-warn { color: var(--warn); }
+    .status-bad { color: var(--bad); }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); background: #0a1622; color: var(--muted); margin-right: 8px; margin-bottom: 8px; }
+    .check-list { margin: 14px 0 0 18px; padding: 0; }
+    .list-block { display: grid; gap: 8px; margin-top: 8px; }
+    .diff-grid { display: grid; gap: 12px; }
+    .diff-card { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: #0a1622; }
+    .diff-title { font-weight: 700; color: var(--accent); margin-bottom: 10px; }
+    .empty { color: var(--muted); }
+    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } .main { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-<h1>VISION CORE V6</h1>
+  <div class="wrap">
+    <aside class="sidebar">
+      <div class="brand">VISION CORE V8.3</div>
 
-<button onclick="runMission()">Executar Missão</button>
+      <div class="panel">
+        <h3>Mission Control</h3>
+        <label>Mission</label>
+        <textarea id="missionText" rows="5">corrigir runtime do technetgame</textarea>
+        <label>Environment</label>
+        <select id="environment">
+          <option value="production">production</option>
+          <option value="staging">staging</option>
+        </select>
+        <button onclick="runMission()">Run mission</button>
+      </div>
 
-<pre id="log"></pre>
+      <div class="panel">
+        <h3>Rollback</h3>
+        <label>Snapshot ID</label>
+        <input id="snapshotId" placeholder="snap-..." />
+        <button onclick="rollbackSnapshot()">Rollback snapshot</button>
 
-<script>
-function runMission() {
-    fetch("/api/mission", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ mission: "test" })
-    })
-    .then(r => r.json())
-    .then(d => {
-        document.getElementById("log").innerText =
-            JSON.stringify(d, null, 2);
-    });
-}
-</script>
+        <label>Target file</label>
+        <input id="targetFile" placeholder=".vision_core_runtime/workspace/mission_output.txt" />
+        <button onclick="rollbackFile()">Rollback file</button>
+      </div>
 
+      <div class="panel">
+        <h3>Memory</h3>
+        <button onclick="loadMemory()">List memory</button>
+        <label>Mission ID</label>
+        <input id="memoryMissionId" placeholder="mission-..." />
+        <button onclick="loadMemoryItem()">Get memory item</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="panel">
+        <h2>Health</h2>
+        <button onclick="loadHealth()">Refresh health</button>
+        <pre id="healthOut"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Last mission summary</h2>
+        <div id="summaryOut"></div>
+      </section>
+
+      <section class="panel wide">
+        <h2>GitHub / Codex integration</h2>
+        <button onclick="loadLastIntegration()">Refresh last integration</button>
+        <div id="integrationOut"></div>
+      </section>
+
+
+      <section class="panel wide">
+        <h2>Integration history</h2>
+        <div class="list-block">
+          <label>Page size</label>
+          <input id="historyPageSize" type="number" min="1" max="100" value="5" />
+          <div id="historyMeta"></div>
+          <div class="list-block">
+            <button onclick="prevHistoryPage()">Previous page</button>
+            <button onclick="nextHistoryPage()">Next page</button>
+            <button onclick="loadIntegrationHistory()">Refresh integration history</button>
+          </div>
+        </div>
+        <div id="historyOut" class="diff-grid"></div>
+      </section>
+      <section class="panel wide">
+        <h2>Visual diff</h2>
+        <div id="diffsOut" class="diff-grid"></div>
+      </section>
+
+      <section class="panel wide">
+        <h2>Pipeline steps</h2>
+        <pre id="stepsOut"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Memory output</h2>
+        <pre id="memoryOut"></pre>
+      </section>
+
+      <section class="panel">
+        <h2>Rollback output</h2>
+        <pre id="rollbackOut"></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>

@@ -1,14 +1,12 @@
 from __future__ import annotations
-
 import difflib
 from pathlib import Path
 from vision_core.execution.contracts import ExecutionPlan, ExecutionReceipt, FileDiff
 
-
 class OperatorEngine:
     def apply(self, plan: ExecutionPlan) -> ExecutionReceipt:
-        details: list[str] = []
-        diffs: list[FileDiff] = []
+        details = []
+        diffs = []
         applied_files = 0
 
         for operation in plan.operations:

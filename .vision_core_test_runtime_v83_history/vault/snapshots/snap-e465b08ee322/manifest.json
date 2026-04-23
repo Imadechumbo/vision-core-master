@@ -1,0 +1,22 @@
+{
+  "snapshot_id": "snap-e465b08ee322",
+  "mission_id": "mission-b30a1356f2bf",
+  "files": [
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/mission_output.txt",
+      "file_name": "mission_output.txt",
+      "source_existed": true
+    },
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/incident_summary.txt",
+      "file_name": "incident_summary.txt",
+      "source_existed": true
+    },
+    {
+      "target_file": ".vision_core_test_runtime_v83_history/workspace/adaptive_notes.txt",
+      "file_name": "adaptive_notes.txt",
+      "source_existed": false
+    }
+  ],
+  "created_at": "2026-04-23T14:53:50.510557+00:00"
+}

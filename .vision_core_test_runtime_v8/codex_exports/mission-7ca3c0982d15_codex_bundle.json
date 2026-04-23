@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-04-23T14:22:48.659047+00:00",
+  "mission_id": "mission-7ca3c0982d15",
+  "mission": "corrigir runtime do technetgame",
+  "decision": "GOLD",
+  "root_cause": "runtime_instability",
+  "strategy": "stabilize_runtime_then_validate",
+  "validation": {
+    "outcome": "GOLD",
+    "pass_gold": true,
+    "gates": {
+      "diagnosis_present": true,
+      "execution_completed": true,
+      "snapshot_created": true,
+      "confidence_threshold": true,
+      "multi_file_supported": true
+    },
+    "findings": []
+  },
+  "security": {
+    "promotion_allowed": true,
+    "reasons": []
+  },
+  "execution": {
+    "applied_files": 3,
+    "details": [
+      "append_text applied to .vision_core_test_runtime_v8/workspace/mission_output.txt",
+      "replace_text applied to .vision_core_test_runtime_v8/workspace/incident_summary.txt",
+      "replace_text applied to .vision_core_test_runtime_v8/workspace/adaptive_notes.txt"
+    ],
+    "diffs": [
+      {
+        "target_file": ".vision_core_test_runtime_v8/workspace/mission_output.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8/workspace/mission_output.txt.before\n+++ .vision_core_test_runtime_v8/workspace/mission_output.txt.after\n@@ -2,3 +2,7 @@\n root_cause=runtime_instability\n summary=Hermes heuristic mode detected probable runtime instability\n strategy=stabilize_runtime_then_validate\n+mission_id=mission-7ca3c0982d15\n+root_cause=runtime_instability\n+summary=Hermes heuristic mode detected probable runtime instability\n+strategy=stabilize_runtime_then_validate\n"
+      },
+      {
+        "target_file": ".vision_core_test_runtime_v8/workspace/incident_summary.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8/workspace/incident_summary.txt.before\n+++ .vision_core_test_runtime_v8/workspace/incident_summary.txt.after\n@@ -1,4 +1,4 @@\n-incident=mission-0988ce63f1cc\n+incident=mission-7ca3c0982d15\n confidence=0.82\n root_cause=runtime_instability\n source=heuristic\n"
+      },
+      {
+        "target_file": ".vision_core_test_runtime_v8/workspace/adaptive_notes.txt",
+        "diff_text": "--- .vision_core_test_runtime_v8/workspace/adaptive_notes.txt.before\n+++ .vision_core_test_runtime_v8/workspace/adaptive_notes.txt.after\n@@ -0,0 +1,4 @@\n+adaptive_context_for=runtime_instability\n+feedback_count=1\n+avg_score=1.00\n+preferred_strategy=stabilize_runtime_then_validate\n"
+      }
+    ]
+  },
+  "snapshot_id": "snap-09cda41a67a0"
+}
