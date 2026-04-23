@@ -26,6 +26,8 @@ def mission():
             "validation": result.data["validation"].outcome,
             "pass_gold": result.data["validation"].pass_gold,
             "promotion_allowed": result.data["security"].promotion_allowed,
+            "applied_files": result.data["execution_receipt"].applied_files,
+            "snapshot_id": result.data["snapshot_id"],
             "steps": result.steps,
         }
     )

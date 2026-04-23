@@ -8,7 +8,7 @@ from uuid import uuid4
 from vision_core.diagnosis.service import HermesService
 from vision_core.execution.apply import OperatorEngine
 from vision_core.execution.planner import PatchPlanner
-from vision_core.memory.store import MemoryStore
+from vision_core.memory.store import SQLiteMemoryStore
 from vision_core.rollback.restore import RestoreManager
 from vision_core.rollback.snapshot import SnapshotManager
 from vision_core.security.service import AegisService
@@ -50,7 +50,7 @@ class VisionPipeline:
         self.operator = OperatorEngine()
         self.snapshot_manager = SnapshotManager(str(self.vault_root))
         self.restore_manager = RestoreManager(str(self.vault_root))
-        self.memory = MemoryStore(str(self.memory_root))
+        self.memory = SQLiteMemoryStore(str(self.memory_root))
 
     def run(self, mission: str, environment: str = "production"):
         mission_id = f"mission-{uuid4().hex[:12]}"
@@ -119,7 +119,7 @@ class VisionPipeline:
         )
 
     def planning(self, data):
-        self.result.log("planning", "creating execution plan")
+        self.result.log("planning", "creating multi-file execution plan")
         return self.planner.build_plan(
             mission_id=data["mission_id"],
             diagnosis=data["diagnosis"],
@@ -130,7 +130,7 @@ class VisionPipeline:
         self.result.log("snapshot", "creating pre-execution snapshot")
         return self.snapshot_manager.create_snapshot(
             mission_id=data["mission_id"],
-            target_file=data["plan"].target_file,
+            plan=data["plan"],
         )
 
     def execution(self, data):
@@ -167,6 +167,9 @@ class VisionPipeline:
     def rollback(self, data):
         self.result.log("rollback", "restoring snapshot")
         return self.restore_manager.restore_snapshot(data["snapshot_id"])
+
+    def rollback_file(self, snapshot_id: str, target_file: str):
+        return self.restore_manager.restore_file(snapshot_id, target_file)
 
     def persist_memory(self, data):
         record = {

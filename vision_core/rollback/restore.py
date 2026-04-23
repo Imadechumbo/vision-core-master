@@ -16,20 +16,45 @@ class RestoreManager:
             raise FileNotFoundError(f"snapshot manifest not found: {snapshot_id}")
 
         manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-        target = Path(manifest["target_file"])
-        backup_file = snapshot_dir / manifest["file_name"]
+        restored = []
 
-        if manifest["source_existed"]:
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(backup_file, target)
-            action = "restored_previous_file"
-        else:
-            if target.exists():
-                target.unlink()
-            action = "removed_created_file"
+        for entry in manifest.get("files", []):
+            target = Path(entry["target_file"])
+            backup_file = snapshot_dir / "files" / entry["file_name"]
+
+            if entry["source_existed"]:
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(backup_file, target)
+                restored.append({"target_file": str(target), "action": "restored_previous_file"})
+            else:
+                if target.exists():
+                    target.unlink()
+                restored.append({"target_file": str(target), "action": "removed_created_file"})
 
         return {
             "snapshot_id": snapshot_id,
-            "target_file": str(target),
-            "action": action,
+            "restored": restored,
         }
+
+    def restore_file(self, snapshot_id: str, target_file: str) -> dict:
+        snapshot_dir = self.vault_root / snapshot_id
+        manifest_file = snapshot_dir / "manifest.json"
+        if not manifest_file.exists():
+            raise FileNotFoundError(f"snapshot manifest not found: {snapshot_id}")
+
+        manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+        for entry in manifest.get("files", []):
+            if entry["target_file"] == target_file:
+                target = Path(entry["target_file"])
+                backup_file = snapshot_dir / "files" / entry["file_name"]
+
+                if entry["source_existed"]:
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(backup_file, target)
+                    return {"target_file": str(target), "action": "restored_previous_file"}
+                else:
+                    if target.exists():
+                        target.unlink()
+                    return {"target_file": str(target), "action": "removed_created_file"}
+
+        raise FileNotFoundError(f"target file not found in snapshot: {target_file}")

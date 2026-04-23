@@ -1,13 +1,16 @@
-# VISION CORE V6.5
+# VISION CORE V6.6
 
-Pacote V6.5 com:
+Pacote V6.6 com:
 
 - Hermes (diagnosis)
 - SDDF (validation)
 - Aegis (security)
 - Operator (execution)
 - Stable Vault (rollback)
-- Memory store persistente
+- Memory store persistente em SQLite
+- Diff real por arquivo
+- Patch multi-arquivo
+- Rollback seletivo
 - Pipeline operacional integrado
 - CLI e API base
 
