@@ -7,6 +7,7 @@ from uuid import uuid4
 from vision_core.diagnosis.service import HermesService
 from vision_core.execution.apply import OperatorEngine
 from vision_core.execution.planner import PatchPlanner
+from vision_core.integration.service import IntegrationService
 from vision_core.memory.store import SQLiteMemoryStore
 from vision_core.rollback.restore import RestoreManager
 from vision_core.rollback.snapshot import SnapshotManager
@@ -50,15 +51,24 @@ class VisionPipeline:
         self.snapshot_manager = SnapshotManager(str(self.vault_root))
         self.restore_manager = RestoreManager(str(self.vault_root))
         self.memory = SQLiteMemoryStore(str(self.memory_root))
+        self.integration = IntegrationService()
 
-    def run(self, mission: str, environment: str = "production"):
+    def run(
+        self,
+        mission: str,
+        environment: str = "production",
+        integration_context: dict | None = None,
+    ):
         mission_id = f"mission-{uuid4().hex[:12]}"
         self.result.data["mission_id"] = mission_id
         self.result.data["mission_text"] = mission
+        self.result.data["integration_context"] = integration_context or {}
 
         self.result.log("mission", mission)
 
         data = self.orchestration(mission_id, mission)
+        data["integration_context"] = integration_context or {}
+
         diagnosis = self.diagnosis(data)
         data["diagnosis"] = diagnosis
 
@@ -76,6 +86,9 @@ class VisionPipeline:
 
         security = self.security(data, environment=environment)
         data["security"] = security
+
+        integration = self.integration_gate(data, integration_context)
+        data["integration"] = integration
 
         decision = self.decision(data)
         data["decision"] = decision
@@ -100,6 +113,7 @@ class VisionPipeline:
                 "execution_receipt": receipt,
                 "validation": validation,
                 "security": security,
+                "integration": integration,
                 "decision": decision,
                 "memory_record": memory_record,
             }
@@ -152,14 +166,28 @@ class VisionPipeline:
             environment=environment,
         )
 
+    def integration_gate(self, data, integration_context: dict | None):
+        self.result.log("integration", "evaluating PR and merge gates")
+        return self.integration.evaluate_pr(
+            validation=data["validation"],
+            security=data["security"],
+            execution_receipt=data["execution_receipt"],
+            integration_context=integration_context,
+        )
+
     def decision(self, data):
         self.result.log("decision", "evaluating")
         validation = data["validation"]
         security = data["security"]
+        integration = data["integration"]
 
         if validation.outcome == "FAIL":
             return "FAIL"
-        if validation.outcome == "GOLD" and security.promotion_allowed:
+        if (
+            validation.outcome == "GOLD"
+            and security.promotion_allowed
+            and integration["merge_allowed"]
+        ):
             return "GOLD"
         return "PASS"
 
