@@ -91,3 +91,10 @@ runtime/state/
 # =========================
 # extracted/raw/**/__pycache__/
 # extracted/raw/**/*.pyc
+.vision_core_runtime/
+.vision_core_runtime_demo/
+.vision_core_test_runtime_*/
+*.log
+*.tmp
+*.cache
+codex_exports/
