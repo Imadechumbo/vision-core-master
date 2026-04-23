@@ -44,9 +44,14 @@ def mission():
     payload = request.get_json(force=True, silent=True) or {}
     mission_text = payload.get("mission", "default mission")
     environment = payload.get("environment", "production")
+    integration_context = payload.get("integration_context")
 
     pipeline = _pipeline()
-    result = pipeline.run(mission_text, environment=environment)
+    result = pipeline.run(
+        mission_text,
+        environment=environment,
+        integration_context=integration_context,
+    )
 
     return jsonify(_build_mission_response(result))
 
