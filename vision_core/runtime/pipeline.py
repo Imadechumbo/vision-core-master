@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import asdict, is_dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
@@ -170,6 +169,12 @@ class VisionPipeline:
 
     def rollback_file(self, snapshot_id: str, target_file: str):
         return self.restore_manager.restore_file(snapshot_id, target_file)
+
+    def list_memory(self):
+        return self.memory.list_all()
+
+    def get_memory(self, mission_id: str):
+        return self.memory.get_by_mission_id(mission_id)
 
     def persist_memory(self, data):
         record = {
