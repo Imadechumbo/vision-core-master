@@ -1,11 +1,9 @@
-# runtime do VISION CORE
+# runtime vision core
 .vision_core_runtime/
-data/runtime/
 
-# snapshots / execução
-*.snap
-*.log
+# workspace / execução
 *.tmp
+*.log
 
 # python
 __pycache__/
