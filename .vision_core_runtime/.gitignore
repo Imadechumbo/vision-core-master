@@ -1,0 +1,12 @@
+# runtime do VISION CORE
+.vision_core_runtime/
+data/runtime/
+
+# snapshots / execução
+*.snap
+*.log
+*.tmp
+
+# python
+__pycache__/
+*.pyc
