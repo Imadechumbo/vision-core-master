@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from flask import Flask, jsonify, request, send_from_directory
+
 from vision_core.runtime.pipeline import VisionPipeline
 
 DASHBOARD_DIR = Path(__file__).resolve().parents[1] / "dashboard"
@@ -9,6 +10,23 @@ app = Flask(__name__, static_folder=str(DASHBOARD_DIR), static_url_path="/static
 
 def _pipeline() -> VisionPipeline:
     return VisionPipeline()
+
+
+def _build_mission_response(result) -> dict:
+    integration = result.data.get("integration")
+    return {
+        "status": result.status,
+        "mission_id": result.data["mission_id"],
+        "root_cause": result.data["diagnosis"].root_cause,
+        "validation": result.data["validation"].outcome,
+        "pass_gold": result.data["validation"].pass_gold,
+        "promotion_allowed": result.data["security"].promotion_allowed,
+        "applied_files": result.data["execution_receipt"].applied_files,
+        "snapshot_id": result.data["snapshot_id"],
+        "diffs": result.data.get("diffs", []),
+        "integration": integration.to_dict() if integration else None,
+        "steps": result.steps,
+    }
 
 
 @app.get("/")
@@ -30,21 +48,7 @@ def mission():
     pipeline = _pipeline()
     result = pipeline.run(mission_text, environment=environment)
 
-    return jsonify(
-        {
-            "status": result.status,
-            "mission_id": result.data["mission_id"],
-            "root_cause": result.data["diagnosis"].root_cause,
-            "validation": result.data["validation"].outcome,
-            "pass_gold": result.data["validation"].pass_gold,
-            "promotion_allowed": result.data["security"].promotion_allowed,
-            "applied_files": result.data["execution_receipt"].applied_files,
-            "snapshot_id": result.data["snapshot_id"],
-            "diffs": result.data.get("diffs", []),
-            "integration": result.data["integration"].to_dict(),
-            "steps": result.steps,
-        }
-    )
+    return jsonify(_build_mission_response(result))
 
 
 @app.get("/api/integration/last")
